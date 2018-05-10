@@ -1,0 +1,32 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.17",
+    "nodemon": "^1.17.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmwboston/portfolio.git"
+  },
+  "author": "kmwboston",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmwboston/portfolio/issues"
+  },
+  "homepage": "https://github.com/kmwboston/portfolio#readme"
+}
