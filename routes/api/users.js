@@ -64,6 +64,7 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
+  const name = req.body.name;
 
   //check for user
   User.findOne({ email: email }).then(user => {
@@ -79,6 +80,7 @@ router.post("/login", (req, res) => {
         //user matched create jwt payload
         const payload = {
           id: user.id,
+          name: user.name,
           email: user.email
         };
 
