@@ -4,7 +4,8 @@ import {
   ADD_POST,
   GET_ERRORS,
   GET_POSTS,
-  GET_POST
+  GET_POST,
+  DELETE_POST
 } from "./types";
 
 //GET posts
@@ -75,6 +76,24 @@ export const editPost = (postData, id, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+
+// Delete Post
+export const deletePost = id => dispatch => {
+  axios
+    .delete(`/api/posts/${id}`)
+    .then(res =>
+      dispatch({
+        type: DELETE_POST,
+        payload: id
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };
 
 //profile loading
