@@ -7,6 +7,14 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
+  seotitle: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
   text: {
     type: String,
     required: true

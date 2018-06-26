@@ -30,17 +30,28 @@ router.get("/", (req, res) => {
 });
 
 // @route  GET /api/posts/:id
-// @desc   GET post by id
+// @desc   GET post by the id
 // @access Public
 router.get("/:id", (req, res) => {
   Post.findById(req.params.id)
     .then(post => res.json(post))
     .catch(err =>
-      res.status(404).json({ error: "no post found with that ID" })
+      res.status(404).json({ error: "no post found with that id" })
     );
 });
 
-// @route  POST /api/posts
+// @route  GET /api/posts/:seotitle
+// @desc   GET post by the seo title
+// @access Public
+// router.get("/:seotitle", (req, res) => {
+//   Post.findById(req.params.seotitle)
+//     .then(post => res.json(post))
+//     .catch(err =>
+//       res.status(404).json({ error: "no post found with that title" })
+//     );
+// });
+
+// @route  POST /api/posts/createPost
 // @desc   create posts
 // @access Private
 router.post(
@@ -55,9 +66,11 @@ router.post(
     }
 
     const newPost = new Post({
+      user: req.user.id,
+      seotitle: req.body.seotitle,
+      title: req.body.title,
       text: req.body.text,
-      name: req.body.name,
-      user: req.user.id
+      name: req.body.name
     });
 
     newPost.save().then(post => {
