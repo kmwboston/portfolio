@@ -16,6 +16,7 @@ import Blog from "./components/Blog";
 import Dashboard from "./components/dashboard/Dashboard";
 import Profile from "./components/profile/Profile";
 import AddPost from "./components/posts/AddPost";
+import Post from "./components/posts/Post";
 
 import "./App.css";
 
@@ -57,6 +58,9 @@ class App extends Component {
             </Switch>
             <Switch>
               <PrivateRoute exact path="/addPost" component={AddPost} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/post/:id" component={Post} />
             </Switch>
           </div>
         </Router>

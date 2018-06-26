@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import { addPost } from "../../actions/postActions";
+import { getPost, editPost } from "../../actions/postActions";
 import { withRouter } from "react-router-dom";
+import isEmpty from "../../validation/is-empty";
 
-class PostForm extends Component {
+class Post extends Component {
   constructor(props) {
     super(props);
 
@@ -21,9 +22,27 @@ class PostForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.errors) {
-      this.setState({ errors: newProps.errors });
+  componentDidMount() {
+    this.props.getPost(this.props.match.params.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+
+    if (nextProps.post.post) {
+      const post = nextProps.post.post;
+
+      post.title = !isEmpty(post.title) ? post.title : "";
+      post.seotitle = !isEmpty(post.seotitle) ? post.seotitle : "";
+      post.text = !isEmpty(post.text) ? post.text : "";
+
+      this.setState({
+        seotitle: post.seotitle,
+        title: post.title,
+        text: post.text
+      });
     }
   }
 
@@ -33,6 +52,7 @@ class PostForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    console.log("submit");
 
     const { user } = this.props.auth;
 
@@ -43,7 +63,11 @@ class PostForm extends Component {
       name: user.name
     };
 
-    this.props.addPost(newPost, this.props.history);
+    this.props.editPost(
+      newPost,
+      this.props.match.params.id,
+      this.props.history
+    );
   }
 
   render() {
@@ -91,18 +115,21 @@ class PostForm extends Component {
   }
 }
 
-PostForm.propTypes = {
-  addPost: PropTypes.func.isRequired,
+Post.propTypes = {
+  editPost: PropTypes.func.isRequired,
+  getPost: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  post: state.post,
   auth: state.auth,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { addPost }
-)(withRouter(PostForm));
+  { getPost, editPost }
+)(withRouter(Post));

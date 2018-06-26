@@ -43,13 +43,13 @@ router.get("/:id", (req, res) => {
 // @route  GET /api/posts/:seotitle
 // @desc   GET post by the seo title
 // @access Public
-// router.get("/:seotitle", (req, res) => {
-//   Post.findById(req.params.seotitle)
-//     .then(post => res.json(post))
-//     .catch(err =>
-//       res.status(404).json({ error: "no post found with that title" })
-//     );
-// });
+router.get("/:seotitle", (req, res) => {
+  Post.findById(req.params.seotitle)
+    .then(post => res.json(post))
+    .catch(err =>
+      res.status(404).json({ error: "no post found with that title" })
+    );
+});
 
 // @route  POST /api/posts/createPost
 // @desc   create posts
@@ -75,6 +75,42 @@ router.post(
 
     newPost.save().then(post => {
       res.json(post);
+    });
+  }
+);
+
+// @route   PUT api/post/:id
+// @desc    Edit note
+// @access  Private
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // Return any errors with 400 status
+      return res.status(400).json(errors);
+    }
+
+    // Get fields
+    const postFields = {};
+    if (req.body.seotitle) postFields.seotitle = req.body.seotitle;
+    if (req.body.title) postFields.title = req.body.title;
+    if (req.body.text) postFields.text = req.body.text;
+
+    Post.findById(req.params.id).then(post => {
+      if (post) {
+        // Update
+        Post.findByIdAndUpdate(
+          req.params.id,
+          { $set: postFields },
+          { new: true }
+        ).then(post => res.json(post));
+      } else {
+        res.status(400).json({ message: "didn't work for some reason" });
+      }
     });
   }
 );
